@@ -44,11 +44,28 @@ syn keyword scalaKeywordModifier lazy
 syn keyword scalaKeywordModifier private
 syn keyword scalaKeywordModifier protected
 syn keyword scalaKeywordModifier sealed
-syn match scalaKeyword "=>"
-syn match scalaKeyword "<-"
+" Those are not really keywords, but are nearly used as so
+syn keyword scalaKeyword map
+syn keyword scalaKeyword flatMap
+syn keyword scalaKeyword filter
+syn keyword scalaKeyword reduce
+syn keyword scalaKeyword foreach
+syn keyword scalaKeyword fold
+syn keyword scalaKeyword foldLeft
+syn keyword scalaKeyword foldRight
 syn match scalaKeyword "\<_\>"
 
-syn match scalaOperator ":\{2,\}" "this is not a type
+syn match scalaOperator "=>"
+syn match scalaOperator "<-"
+syn match scalaOperator "-|+"
+"syn match scalaOperator ":\{2,\}" "this is not a type
+syn match scalaOperator	"\([-+*/%&^|<>!=]\)="
+syn match scalaOperator	"&&\|||\|++\|--\|->\|::\|+:\|:+\|:::"
+syn match scalaOperator	"[.!~*&%<>^|=,+-]"
+syn match scalaOperator	"/[^/*=]"me=e-1
+
+syn match scalaDelimiter	"[(){};\\]"
+syn match scalaDelimiter	"[][:]" contains=scalaOperator
 
 " package and import statements
 syn keyword scalaPackage package nextgroup=scalaFqn skipwhite
@@ -89,8 +106,10 @@ syn match scalaCaseType "\(case\s\+[_a-zA-Z0-9]\+\)\@<=:\s*[\._$a-zA-Z0-9]\+\(\[
 
 " comments
 syn match scalaTodo "[tT][oO][dD][oO]" contained
-syn match scalaLineComment "//.*" contains=scalaTodo
-syn region scalaComment start="/\*" end="\*/" contains=scalaTodo
+syn match scalaFixme "[fF][iI][xX][mM][eE]" contained
+syn match scalaXXX "[xX][xX][xX]" contained
+syn match scalaLineComment "//.*" contains=scalaTodo,scalaFixme,scalaXXX
+syn region scalaComment start="/\*" end="\*/" contains=scalaTodo,scalaFixme,scalaXXX
 syn case ignore
 syn include @scalaHtml syntax/html.vim
 syn case match
@@ -134,7 +153,13 @@ syn match scalaXmlComment "<!--\_[^>]*-->" contained
 " REPL
 syn match scalaREPLCmdLine "\<scala>\>"
 
+
+" A try at Scala function calls. It won't be perfect, though.
+syn match scalaFunctionCall "[a-z]\([a-z]\|[A-Z]\)\+(" contains=scalaDelimiter
+
 " map Scala groups to standard groups
+hi link scalaFunctionCall Function
+
 hi link scalaKeyword Keyword
 hi link scalaKeywordModifier Function
 hi link scalaAnnotation Include
@@ -157,6 +182,8 @@ hi link scalaComment Comment
 hi link scalaLineComment Comment
 hi link scalaDocComment Comment
 hi link scalaTodo Todo
+hi link scalaFixme Todo
+hi link scalaXXX Todo
 hi link scalaType Type
 hi link scalaCaseType Type
 hi link scalaTypeSpecializer scalaType
@@ -176,10 +203,13 @@ hi link scalaObject Keyword
 hi link scalaTrait Keyword
 hi link scalaDefName Function
 hi link scalaDefSpecializer Function
-hi link scalaClassName Special
+hi link scalaClassName Type
 hi link scalaClassSpecializer Special
-hi link scalaConstructor Special
+hi link scalaConstructor Type
 hi link scalaConstructorSpecializer scalaConstructor
+
+hi link scalaOperator operator
+hi link scalaDelimiter Special
 
 let b:current_syntax = "scala"
 
