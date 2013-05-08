@@ -1,3 +1,10 @@
+This is a fork from Derek Wyatt's version of the Scala vim files. I'll make some
+personal modifications to the syntax file, but the credit goes mostly to him and
+the other contributors. Feel free to copy, use and further modify my modifications.
+
+Below is the original README:
+
+
 This is a "bundle" for Vim that builds off of the initial Scala plugin modules
 by Stefan Matthias Aust and adds some more "stuff" that I find useful, including
 all of my notes and customizations.
